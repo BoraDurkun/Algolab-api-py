@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 import requests, hashlib, json, base64, inspect, time
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad
@@ -7,7 +7,7 @@ from config import *
 
 last_request = 0.0
 LOCK = False
-class AlgoLab():
+class Backend():
     def __init__(self, api_key, username, password, auto_login=True, keep_alive=True, verbose=True):
         """
         api_key: API_KEY
@@ -36,7 +36,6 @@ class AlgoLab():
         self.new_hour = False
         self.sms_code = ""
         self.hash = ""
-        self.mesaj=""
         self.start()
 
     def save_settings(self):
@@ -65,12 +64,14 @@ class AlgoLab():
             s = self.load_settings()
             if not s or not self.is_alive:
                 if self.verbose:
-                    self.mesaj=("Login zaman aşımına uğradı. Yeniden giriş yapılıyor...")
+                    print("Login zaman aşımına uğradı. Yeniden giriş yapılıyor...")
+                    
                 if self.LoginUser():
                     self.LoginUserControl()
             else:
                 if self.verbose:
-                    self.mesaj=("Otomatik login başarılı...")
+                    print("Otomatik login başarılı...")
+                    
         if self.keep_alive:
             self.thread_keepalive.start()
 
@@ -84,7 +85,8 @@ class AlgoLab():
     def LoginUser(self):
         try:
             if self.verbose:
-                self.mesaj=("Login işlemi yapılıyor...")
+                print("Login işlemi yapılıyor...")
+                
             f = inspect.stack()[0][3]
             u = self.encrypt(self.username)
             p = self.encrypt(self.password)
@@ -101,18 +103,19 @@ class AlgoLab():
             if succ:
                 self.token = content["token"]
                 if self.verbose:
-                    self.mesaj=("Login başarılı.")
+                    print("Login başarılı.")
                 return True
             else:
                 if self.verbose:
-                    self.mesaj=(f"Login Başarısız. self.mesaj: {msg}")
+                    print(f"Login Başarısız. self.mesaj: {msg}")
         except Exception as e:
-            self.mesaj=(f"{f}() fonsiyonunda hata oluştu: {e}")
+            print(f"{f}() fonsiyonunda hata oluştu: {e}")
 
     def LoginUserControl(self):
         try:
             if self.verbose:
-                self.mesaj=("Login kontrolü yapılıyor...")
+                print("Login kontrolü yapılıyor...")
+                
             self.sms_code = input("Cep telefonunuza gelen SMS kodunu girin: ")
             f = inspect.stack()[0][3]
             t = self.encrypt(self.token)
@@ -130,15 +133,17 @@ class AlgoLab():
             if succ:
                 self.hash = content["hash"]
                 if self.verbose:
-                    self.mesaj=("Login kontrolü başarılı.")
-                    #self.mesaj=(f"Hash: {self.hash}")
+                    print("Login kontrolü başarılı.")
+                    
                 self.save_settings()
                 return True
             else:
                 if self.verbose:
-                    self.mesaj=(f"Login kontrolü başarısız.\nself.mesaj: {msg}")
+                    print(f"Login kontrolü başarısız.\nself.mesaj: {msg}")
+                    
         except Exception as e:
-            self.mesaj=(f"{f}() fonsiyonunda hata oluştu: {e}")
+            print(f"{f}() fonsiyonunda hata oluştu: {e}")
+            
 
     # REQUESTS
 
@@ -151,7 +156,8 @@ class AlgoLab():
             return self.error_check(resp, f, silent)
         except Exception as e:
             if not silent:
-                self.mesaj=(f"{f}() fonsiyonunda hata oluştu: {e}")
+                print(f"{f}() fonsiyonunda hata oluştu: {e}")
+                
 
     def GetEquityInfo(self, symbol):
         """
@@ -164,7 +170,8 @@ class AlgoLab():
             resp = self.post(endpoint, payload=payload)
             return self.error_check(resp, f)
         except Exception as e:
-            self.mesaj=(f"{f}() fonsiyonunda hata oluştu: {e}")
+            print(f"{f}() fonsiyonunda hata oluştu: {e}")
+            
 
     def GetSubAccounts(self, silent=False):
         try:
@@ -173,7 +180,8 @@ class AlgoLab():
             resp = self.post(end_point, {})
             return self.error_check(resp, f, silent=silent)
         except Exception as e:
-            self.mesaj=(f"{f}() fonsiyonunda hata oluştu: {e}")
+            print(f"{f}() fonsiyonunda hata oluştu: {e}")
+            
 
     def GetInstantPosition(self, sub_account=""):
         try:
@@ -183,7 +191,8 @@ class AlgoLab():
             resp = self.post(end_point, payload)
             return self.error_check(resp, f)
         except Exception as e:
-            self.mesaj=(f"{f}() fonsiyonunda hata oluştu: {e}")
+            print(f"{f}() fonsiyonunda hata oluştu: {e}")
+            
 
     def GetTodaysTransaction(self, sub_account=""):
         try:
@@ -193,7 +202,8 @@ class AlgoLab():
             resp = self.post(end_point, payload)
             return self.error_check(resp, f)
         except Exception as e:
-            self.mesaj=(f"{f}() fonsiyonunda hata oluştu: {e}")
+            print(f"{f}() fonsiyonunda hata oluştu: {e}")
+            
 
     def GetViopCustomerOverall(self, sub_account=""):
         try:
@@ -203,7 +213,8 @@ class AlgoLab():
             resp = self.post(end_point, payload)
             return self.error_check(resp, f)
         except Exception as e:
-            self.mesaj=(f"{f}() fonsiyonunda hata oluştu: {e}")
+            print(f"{f}() fonsiyonunda hata oluştu: {e}")
+            
 
     def GetViopCustomerTransactions(self, sub_account=""):
         try:
@@ -213,7 +224,59 @@ class AlgoLab():
             resp = self.post(end_point, payload)
             return self.error_check(resp, f)
         except Exception as e:
-            self.mesaj=(f"{f}() fonsiyonunda hata oluştu: {e}")
+            print(f"{f}() fonsiyonunda hata oluştu: {e}")
+            
+
+
+    def ViopColleteralInfo(self, sub_account=""):
+        try:
+            f = inspect.stack()[0][3]
+            end_point = URL_VIOPCOLLETERALINFO
+            payload = {'Subaccount': sub_account}
+            resp = self.post(end_point, payload)
+            return self.error_check(resp, f)
+        except Exception as e:
+            print(f"{f}() fonsiyonunda hata oluştu: {e}")
+            
+            
+    def RiskSimulation(self, sub_account=""):
+        try:
+            f = inspect.stack()[0][3]
+            end_point = URL_RISKSIMULATION
+            payload = {'Subaccount': sub_account}
+            resp = self.post(end_point, payload)
+            return self.error_check(resp, f)
+        except Exception as e:
+            print(f"{f}() fonsiyonunda hata oluştu: {e}")
+            
+    def AccountExtre(self, sub_account="",start_date=None,end_date=None):
+        """
+        start_date: başlangıç tarihi "2023-07-01 00:00:00" formatında
+        end_date: bitiş tarihi "2023-07-01 00:00:00" formatında
+        """
+        try:
+            f = inspect.stack()[0][3]
+            end_point = URL_ACCOUNTEXTRE
+            payload = {'Subaccount': sub_account,
+            'start': start_date,
+            'end': end_date
+            }
+            resp = self.post(end_point, payload)
+            return self.error_check(resp, f)
+        except Exception as e:
+            print(f"{f}() fonsiyonunda hata oluştu: {e}")
+
+
+            
+    def CashFlow(self, sub_account=""):
+        try:
+            f = inspect.stack()[0][3]
+            end_point = URL_CASHFLOW
+            payload = {'Subaccount': sub_account}
+            resp = self.post(end_point, payload)
+            return self.error_check(resp, f)
+        except Exception as e:
+            print(f"{f}() fonsiyonunda hata oluştu: {e}") 
 
     def GetCandleData(self, symbol, period):
         try:
@@ -226,7 +289,8 @@ class AlgoLab():
             resp = self.post(end_point, payload)
             return self.error_check(resp, f)
         except Exception as e:
-            self.mesaj=(f"{f}() fonsiyonunda hata oluştu: {e}")
+            print(f"{f}() fonsiyonunda hata oluştu: {e}")
+            
 
     # ORDERS
 
@@ -271,11 +335,14 @@ class AlgoLab():
                 return data
             except:
                 f = inspect.stack()[0][3]
-                self.mesaj=(f"{f}() fonksiyonunda veri tipi hatası. Veri, json formatından farklı geldi:")
-                self.mesaj=(resp.text)
+                print(f"{f}() fonksiyonunda veri tipi hatası. Veri, json formatından farklı geldi:")
+                
+                print(resp.text)
+                
         except Exception as e:
             f = inspect.stack()[0][3]
-            self.mesaj=(f"{f}() fonsiyonunda hata oluştu: {e}")
+            print(f"{f}() fonsiyonunda hata oluştu: {e}")
+             
 
     def ModifyOrder(self, id, price, lot, viop, subAccount):
         """
@@ -309,11 +376,14 @@ class AlgoLab():
                 return data
             except:
                 f = inspect.stack()[0][3]
-                self.mesaj=(f"{f}() fonksiyonunda veri tipi hatası. Veri, json formatından farklı geldi:")
-                self.mesaj=(resp.text)
+                print(f"{f}() fonksiyonunda veri tipi hatası. Veri, json formatından farklı geldi:")
+                
+                print(resp.text)
+                
         except Exception as e:
             f = inspect.stack()[0][3]
-            self.mesaj=(f"{f}() fonsiyonunda hata oluştu: {e}")
+            print(f"{f}() fonsiyonunda hata oluştu: {e}")
+            
 
     def DeleteOrder(self, id, subAccount):
         """
@@ -338,11 +408,14 @@ class AlgoLab():
                 return data
             except:
                 f = inspect.stack()[0][3]
-                self.mesaj=(f"{f}() fonksiyonunda veri tipi hatası. Veri, json formatından farklı geldi:")
-                self.mesaj=(resp.text)
+                print(f"{f}() fonksiyonunda veri tipi hatası. Veri, json formatından farklı geldi:")
+                
+                print(resp.text)
+                
         except Exception as e:
             f = inspect.stack()[0][3]
-            self.mesaj=(f"{f}() fonsiyonunda hata oluştu: {e}")
+            print(f"{f}() fonsiyonunda hata oluştu: {e}")
+            
 
     def DeleteOrderViop(self, id, adet, subAccount):
         """
@@ -370,12 +443,79 @@ class AlgoLab():
                 return data
             except:
                 f = inspect.stack()[0][3]
-                self.mesaj=(f"{f}() fonksiyonunda veri tipi hatası. Veri, json formatından farklı geldi:")
-                self.mesaj=(resp.text)
+                print(f"{f}() fonksiyonunda veri tipi hatası. Veri, json formatından farklı geldi:")
+                
+                print(resp.text)
+                
         except Exception as e:
             f = inspect.stack()[0][3]
-            self.mesaj=(f"{f}() fonsiyonunda hata oluştu: {e}")
+            print(f"{f}() fonsiyonunda hata oluştu: {e}")
+            
+            
+    def GetEquityOrderHistory(self, id, subAccount):
+        """
+        :String id: Emrin ID’ si
+        :String subAccount: Alt Hesap Numarası “Boş gönderilebilir. Boş gönderilir ise Aktif Hesap Bilgilerini getirir.”
 
+        Örnek Body
+        {
+            "id":"001VEV",
+            "subAccount":""
+        }
+        """
+        try:
+            end_point = URL_GETEQUITYORDERHISTORY
+            payload = {
+                'id': id,
+                'subAccount': subAccount
+            }
+            resp = self.post(end_point, payload)
+            try:
+                data = resp.json()
+                return data
+            except:
+                f = inspect.stack()[0][3]
+                print(f"{f}() fonksiyonunda veri tipi hatası. Veri, json formatından farklı geldi:")
+                
+                print(resp.text)
+                
+        except Exception as e:
+            f = inspect.stack()[0][3]
+            print(f"{f}() fonsiyonunda hata oluştu: {e}")
+            
+
+    def GetViopOrderHistory(self, id, subAccount):
+        """
+        :String id: Emrin ID’ si
+        :String subAccount: Alt Hesap Numarası “Boş gönderilebilir. Boş gönderilir ise Aktif Hesap Bilgilerini getirir.”
+
+        Örnek Body
+        {
+            "id":"001VEV",
+            "subAccount":""
+        }
+        """
+        try:
+            f = inspect.stack()[0][3]
+            end_point = URL_GETVIOPORDERHISTORY
+            payload = {
+                'id': id,
+                'subAccount': subAccount
+            }
+            resp = self.post(end_point, payload)
+            try:
+                data = resp.json()
+                return data
+            except:
+                f = inspect.stack()[0][3]
+                print(f"{f}() fonksiyonunda veri tipi hatası. Veri, json formatından farklı geldi:")
+                
+                print(resp.text)
+                
+        except Exception as e:
+            f = inspect.stack()[0][3]
+            print(f"{f}() fonsiyonunda hata oluştu: {e}")
+            
     # TOOLS
 
     def GetIsAlive(self):
@@ -393,13 +533,17 @@ class AlgoLab():
                 return data
             else:
                 if not silent:
-                    self.mesaj=(f"Error kodu: {resp.status_code}")
-                    self.mesaj=(resp.text)
+                    print(f"Error kodu: {resp.status_code}")
+                    
+                    print(resp.text)
+                    
                 return False
         except:
             if not silent:
-                self.mesaj=(f"{f}() fonksiyonunda veri tipi hatası. Veri, json formatından farklı geldi:")
-                self.mesaj=(resp.text)
+                print(f"{f}() fonksiyonunda veri tipi hatası. Veri, json formatından farklı geldi:")
+                
+                print(resp.text)
+                
             return False
 
     def encrypt(self, text):
