@@ -1,3 +1,4 @@
+# URLS
 hostname = "www.algolab.com.tr"
 api_hostname = f"https://{hostname}"
 api_url = api_hostname + "/api"
@@ -13,7 +14,10 @@ MARKETS = {
     "INTUSD": "",
     "INTEUR": "",
 }
-
+# USER INFO
+MY_API_KEY='API-KEY'
+MY_USERNAME = "TC veya Denizbank Kullanıcı Adı"
+MY_PASSWORD = "Şifre"
 
 # ENDPOINTS
 URL_LOGIN_USER = "/api/LoginUser"
@@ -30,3 +34,9 @@ URL_DELETEORDER = "/api/DeleteOrder"
 URL_DELETEORDERVIOP = "/api/DeleteOrderViop"
 URL_SESSIONREFRESH = "/api/SessionRefresh"
 URL_GETCANDLEDATA = "/api/GetCandleData"
+URL_VIOPCOLLETERALINFO = "/api/ViopCollateralInfo"
+URL_RISKSIMULATION = "/api/RiskSimulation"
+URL_GETEQUITYORDERHISTORY = "/api/GetEquityOrderHistory"
+URL_GETVIOPORDERHISTORY = "/api/GetViopOrderHistory"
+URL_CASHFLOW = "/api/CashFlow"
+URL_ACCOUNTEXTRE = "/api/AccountExtre"
