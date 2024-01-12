@@ -1,23 +1,24 @@
+# USER INFO
+MY_API_KEY='API-KEY' #API Key'inizi Buraya Giriniz
+MY_USERNAME = "TC veya Denizbank Kullanıcı Adı" #TC veya Denizbank Kullanıcı Adınızı Buraya Giriniz
+MY_PASSWORD = "Şifre" #Denizbank İnternet Bankacılığı Şifrenizi Buraya Giriniz
+
 # URLS
 hostname = "www.algolab.com.tr"
 api_hostname = f"https://{hostname}"
 api_url = api_hostname + "/api"
 socket_url = f"wss://{hostname}/api/ws"
 
-# MARKETS
-MARKETS = {
-    "VIP": "BIST30 VIOP",
-    "KIYM": "KIYMETLİ MADENLER",
-    "FX": "FOREX",
-    "IMKBH": "BIST SPOT",
-    "IMKBX": "ENDEKS",
-    "INTUSD": "",
-    "INTEUR": "",
-}
-# USER INFO
-MY_API_KEY='API-KEY'
-MY_USERNAME = "TC veya Denizbank Kullanıcı Adı"
-MY_PASSWORD = "Şifre"
+# ORDER STATUS
+ORDER_STATUS = {0: "Bekleyen",
+1: "Teslim Edildi",
+2: "Gerçekleşti",
+3: "Kısmi Gerçekleşti",
+4: "İptal Edildi",
+5: "Değiştirildi",
+6: "Askıya Alındı",
+7: "Süresi Doldu",
+8: "Hata"}
 
 # ENDPOINTS
 URL_LOGIN_USER = "/api/LoginUser"
