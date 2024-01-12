@@ -246,14 +246,12 @@ def get_equity_order_history():
     return
 
 def account_extre():
-    print("İşlem gerçekleştiriliyor...")
+    print("Ekstre çekme işlemi gerçekleştiriliyor...")
     start_string=input("Lütfen başlangıç tarihi Girin(başlangıç tarihi '2023-07-01' formatında): ")
-    start_object = datetime.strptime(start_string, "%Y-%m-%d").isoformat()
     end_string=input("Lütfen bitiş tarihi Girin(bitiş tarihi '2023-07-01' formatında): ")
-    end_object = datetime.strptime(end_string, "%Y-%m-%d").isoformat()
+    start_object = datetime.strptime(start_string, "%Y-%m-%d").strftime("%Y-%m-%dT00:00:00")
+    end_object = datetime.strptime(end_string, "%Y-%m-%d").strftime("%Y-%m-%dT00:00:00")
     bakiye=Conn.AccountExtre(start_date=start_object,end_date=end_object)
-    # datetime nesnesini JSON'a dönüştürürken özel seri hale getirme işlevini kullanın
-
     if bakiye:
         try:
             succ = bakiye["true"]
