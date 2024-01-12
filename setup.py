@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name='AlgoLab',
     version='1.0.5',
-    description='Algolab Python sample code,
+    description='Algolab Python Sample code',
     author='BoraDurkun',
     author_email='boradurkun@gmail.com',
     url='https://github.com/BoraDurkun/github-proje',

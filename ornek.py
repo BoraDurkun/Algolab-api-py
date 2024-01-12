@@ -1,11 +1,9 @@
 from algolab import Backend
-import pandas as pd
-import numpy as np
-import json
 from datetime import datetime
 from config import *
-import sys
-############################################ FONKSİYONLAR ##################################################
+import pandas as pd, numpy as np, json, os
+
+############################################ ENDPOINT Fonksiyonları ##################################################
 
 ### Emir  Bilgisi
 def send_order():
@@ -25,13 +23,16 @@ def send_order():
             if succ:
                 content = order["content"]
                 print("Emir Gönderildi, " + content)
+            else: print(order["message"]) 
         except Exception as e:
             print(f"Hata oluştu: {e}")
     input("Önceki menüye dönmek için herhangi  tuşuna basın: ")
     return
+
 def modify_order():
     id=input("Lütfen ID Bilgisi Girin: ")
-    viop=input("Eğer VIOP emri silmek istiyorsanız 'true' istemiyorsanız 'false' olarak giriniz: ")
+    viop_input=input("Eğer VIOP emri silmek istiyorsanız 'true' istemiyorsanız 'false' olarak giriniz: ")
+    viop = viop_input.strip().lower() == 'true'
     lot=input("Lütfen Lot Bilgisi Girin: ")
     price=input("Lütfen Yeni Fiyat Bilgisi Girin: ")
     modify=Conn.ModifyOrder(id=id,price=price,lot=lot,viop=viop,subAccount="")
@@ -41,11 +42,14 @@ def modify_order():
             succ = modify["success"]
             if succ:
                 content = modify["content"]
-                print("Emir Düzeltildi, " + content)
+                print("Emir Düzeltildi")
+            else: print(modify["message"]) 
         except Exception as e:
             print(f"Hata oluştu: {e}")
+    
     input("Önceki menüye dönmek için herhangi  tuşuna basın: ")
     return
+
 def delete_order():
     id=input("Lütfen ID Bilgisi Girin: ")
     delete=Conn.DeleteOrder(id=id,subAccount="")
@@ -57,14 +61,27 @@ def delete_order():
                 content = delete["content"]
                 content_json = json.dumps(content)
                 print("Emir Silindi, " + content_json)
+            else: print(delete["message"]) 
         except Exception as e:
             print(f"Hata oluştu: {e}")
     input("Önceki menüye dönmek için herhangi  tuşuna basın: ")
     return
 
 def delete_order_viop():
-    Conn.DeleteOrderViop(id="",adet="",subAccount="")
-    print("** işlemi gerçekleştiriliyor...")
+    id=input("Lütfen ID Bilgisi Girin: ")
+    adet=input("Lütfen Kontrat Sayısı Girin: ")
+    delete=Conn.DeleteOrderViop(id=id,adet=adet,subAccount="")
+    print("Viop Emir Silme işlemi gerçekleştiriliyor...")
+    if delete:
+        try:
+            succ = delete["success"]
+            if succ:
+                content = delete["content"]
+                content_json = json.dumps(content)
+                print("Emir Silindi, " + content_json)
+            else: print(delete["message"]) 
+        except Exception as e:
+            print(f"Hata oluştu: {e}")
     input("Önceki menüye dönmek için herhangi  tuşuna basın: ")
     return
 
@@ -93,22 +110,27 @@ def get_candle_data():
                 # oluşturduğumuz listi pandas dataframe'e aktarıyoruz
                 df = pd.DataFrame(columns=["date", "open", "high", "low", "close"], data=np.array(ohlc))
                 print(df.tail())
+                json_data=df.to_json(orient='records')
+                with open(SYMBOL+PERIOD+'.json', 'w', encoding='utf-8') as f:
+                    f.write(json_data)
+            else: print(candle["message"]) 
         except Exception as e:
             print(f"Hata oluştu: {e}")
     input("Önceki menüye dönmek için herhangi  tuşuna basın: ")
     return
 
 def get_equity_info():
-    SYMBOL=input("Lütfen Sembol Bilgisi Girin: ")
+    symbol=input("Lütfen Sembol Bilgisi Girin: ")
     print("** işlemi gerçekleştiriliyor...")
-    INFO=Conn.GetEquityInfo(symbol=SYMBOL)
-    if INFO:
+    info=Conn.GetEquityInfo(symbol=symbol)
+    if info:
         try:
-            succ = INFO["success"]
+            succ = info["success"]
             if succ:
-                content = INFO["content"]
+                content = info["content"]
                 df = pd.DataFrame(content,index=[0])
                 print(df)
+            else: print(info["message"]) 
         except Exception as e:
             print(f"Hata oluştu: {e}")
     input("Önceki menüye dönmek için herhangi  tuşuna basın: ")
@@ -124,7 +146,8 @@ def get_instant_position():
             if succ:
                 content = bakiye["content"]
                 df = pd.DataFrame(content)
-                print(df)        
+                print(df) 
+            else: print(bakiye["message"]) 
         except Exception as e:
             print(f"Hata oluştu: {e}")
     input("Önceki menüye dönmek için herhangi  tuşuna basın: ")
@@ -140,6 +163,7 @@ def get_viop_customer_overall():
                 content = bakiye["content"]
                 df = pd.DataFrame(content)
                 print(df)  
+            else: print(bakiye["message"]) 
         except Exception as e:
             print(f"Hata oluştu: {e}") 
     input("Önceki menüye dönmek için herhangi  tuşuna basın: ")
@@ -154,12 +178,12 @@ def get_subaccounts():
             if succ:
                 content = bakiye["content"]
                 df = pd.DataFrame(content)
-                print(df)  
+                print(df)
+            else: print(bakiye["message"]) 
         except Exception as e:
             print(f"Hata oluştu: {e}")
     input("Önceki menüye dönmek için herhangi  tuşuna basın: ")
     return
-###
 
 ### İşlem Bilgisi
 def get_todays_transaction():
@@ -172,6 +196,7 @@ def get_todays_transaction():
                 content = islem["content"]
                 df = pd.DataFrame(content)
                 print(df)        
+            else: print(islem["message"]) 
         except Exception as e:
             print(f"Hata oluştu: {e}")
     input("Önceki menüye dönmek için herhangi  tuşuna basın: ")
@@ -186,14 +211,15 @@ def get_viop_customer_transactions():
             if succ:
                 content = islem["content"]
                 df = pd.DataFrame(content,index=[0])
-                print(df)        
+                print(df)       
+            else: print(islem["message"]) 
         except Exception as e:
             print(f"Hata oluştu: {e}")
     
     input("Önceki menüye dönmek için herhangi  tuşuna basın: ")
     return
-###
 
+### Oturum Süresi Uzatma
 def session_refresh():
     print("İşlem gerçekleştiriliyor...")
     islem=Conn.SessionRefresh()
@@ -201,7 +227,7 @@ def session_refresh():
     input("Önceki menüye dönmek için herhangi  tuşuna basın: ")
     return
 
-### Yeni eklenenler
+### Yeni eklenen Endpointler
 def get_equity_order_history():
     print("İşlem gerçekleştiriliyor...")
     id=input("Lütfen ID Bilgisi Girin: ")
@@ -212,7 +238,8 @@ def get_equity_order_history():
             if succ:
                 content = bakiye["content"]
                 df = pd.DataFrame(content)
-                print(df)  
+                print(df) 
+            else: print(bakiye["message"]) 
         except Exception as e:
             print(f"Hata oluştu: {e}") 
     input("Önceki menüye dönmek için herhangi  tuşuna basın: ")
@@ -221,10 +248,12 @@ def get_equity_order_history():
 def account_extre():
     print("İşlem gerçekleştiriliyor...")
     start_string=input("Lütfen başlangıç tarihi Girin(başlangıç tarihi '2023-07-01' formatında): ")
-    start_object = datetime.strptime(start_string, "%Y-%m-%d")
+    start_object = datetime.strptime(start_string, "%Y-%m-%d").isoformat()
     end_string=input("Lütfen bitiş tarihi Girin(bitiş tarihi '2023-07-01' formatında): ")
-    end_object = datetime.strptime(end_string, "%Y-%m-%d")
+    end_object = datetime.strptime(end_string, "%Y-%m-%d").isoformat()
     bakiye=Conn.AccountExtre(start_date=start_object,end_date=end_object)
+    # datetime nesnesini JSON'a dönüştürürken özel seri hale getirme işlevini kullanın
+
     if bakiye:
         try:
             succ = bakiye["true"]
@@ -232,12 +261,13 @@ def account_extre():
                 content = bakiye["content"]
                 df = pd.DataFrame(content)
                 print(df)  
+            else: print(bakiye["message"]) 
         except Exception as e:
             print(f"Hata oluştu: {e}") 
     input("Önceki menüye dönmek için herhangi  tuşuna basın: ")
     return
 
-def cash_flow():
+def cash_flow():   
     print("İşlem gerçekleştiriliyor...")
     bakiye=Conn.CashFlow()
     if bakiye:
@@ -246,11 +276,11 @@ def cash_flow():
                 content = bakiye["content"]
                 df = pd.DataFrame(content,index=[0])
                 print(df)  
+            else: print(bakiye["message"]) 
         except Exception as e:
             print(f"Hata oluştu: {e}")
     input("Önceki menüye dönmek için herhangi  tuşuna basın: ")
     return
-
 
 def get_equity_order_history():
     print("İşlem gerçekleştiriliyor...")
@@ -263,6 +293,7 @@ def get_equity_order_history():
                 content = bakiye["content"]
                 df = pd.DataFrame(content)
                 print(df)  
+            else: print(bakiye["message"]) 
         except Exception as e:
             print(f"Hata oluştu: {e}") 
     input("Önceki menüye dönmek için herhangi  tuşuna basın: ")
@@ -279,6 +310,7 @@ def get_viop_order_history():
                 content = bakiye["content"]
                 df = pd.DataFrame(content)
                 print(df)  
+            else: print(bakiye["message"]) 
         except Exception as e:
             print(f"Hata oluştu: {e}") 
     input("Önceki menüye dönmek için herhangi  tuşuna basın: ")
@@ -294,6 +326,7 @@ def risk_simulation():
                 content = bakiye["content"]
                 df = pd.DataFrame(content,index=[0])
                 print(df)  
+            else: print(bakiye["message"]) 
         except Exception as e:
             print(f"Hata oluştu: {e}") 
     input("Ana menüye dönmek için herhangi  tuşuna basın: ")
@@ -309,6 +342,7 @@ def viop_collateral_info():
                 content = bakiye["content"]
                 df = pd.DataFrame(content,index=[0])
                 print(df)  
+            else: print(bakiye["message"]) 
         except Exception as e:
             print(f"Hata oluştu: {e}") 
     input("Önceki menüye dönmek için herhangi  tuşuna basın: ")
@@ -316,9 +350,6 @@ def viop_collateral_info():
 
 ############################################ MENÜLER##################################################
 
-def ext():
-    print("Çıkış Yapılıyor...")
-    sys.exit
 def main_menu():
     while True:
         print("\nAna Menüye hoş geldiniz. Lütfen yapmak istediğiniz işlemi seçin:")
@@ -363,10 +394,11 @@ def main_menu():
                 continue
         elif secim == '0':
             print("Çıkış yapılıyor...")
-            break
+            os._exit(0)  # 0 başarılı çıkışı temsil eder
         else:
             print("Geçersiz seçim.")
             continue  # Kullanıcı hatalı seçim yaptı, ana menüye dön
+
 def order_menu():
     while True:
         print("\nLütfen yapmak istediğiniz işlemi seçin:")
@@ -402,7 +434,7 @@ def order_menu():
             if cash_flow():
                 continue
         elif secim == '0':
-            ext()
+            main_menu()
         else:
             print("Geçersiz seçim.")
             continue  # Kullanıcı hatalı seçim yaptı, menüye dön
@@ -426,11 +458,11 @@ def account_menu():
             if get_viop_customer_overall():
                 continue
         elif secim == '0':
-            if main_menu():
-                continue
+            main_menu()
         else:
             print("Geçersiz seçim.")
             continue  # Kullanıcı hatalı seçim yaptı, menüye dön
+
 if __name__ == "__main__":
     # Login olarak, token alıyoruz
     try:
@@ -438,4 +470,3 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"Hata oluştu: {e}")
     main_menu()  # ana menüye dönüyoruz
-    print("Sonlandırıldı")
