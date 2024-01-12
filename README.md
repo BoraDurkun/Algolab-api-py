@@ -1,4 +1,4 @@
-# AlgoLab API KOD ORNEĞİ
+# ALGOLAB API KOD ORNEĞİ
 
 Algolab API örnek Python kodu, ilgili kodu indirdikten sonra config içerisinde yer alan (API-KEY,TC_NO,PASSWORD) bilgilerini doldurarak Algolab API işlemleri için kullanabilirsiniz. ornek.py dosyasını çalıştırarak tüm endpoint işlemlerini bir menü üzerinden test edebilir ornek_socket üzerinden anlık veri akışı,derinlik,işlem teyit bilgisi çekebilirsiniz.
 
