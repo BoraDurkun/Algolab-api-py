@@ -1,4 +1,4 @@
-from algolab import Backend
+from algolab import API
 from datetime import datetime
 from config import *
 import pandas as pd, numpy as np, json, os
@@ -466,7 +466,7 @@ def account_menu():
 if __name__ == "__main__":
     # Login olarak, token alıyoruz
     try:
-        Conn = Backend(api_key=MY_API_KEY, username=MY_USERNAME, password=MY_PASSWORD, auto_login=True, verbose=True)
+        Conn = API(api_key=MY_API_KEY, username=MY_USERNAME, password=MY_PASSWORD, auto_login=True, verbose=True)
     except Exception as e:
         print(f"Hata oluştu: {e}")
     main_menu()  # ana menüye dönüyoruz

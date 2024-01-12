@@ -1,4 +1,4 @@
-from algolab import Backend
+from algolab import API
 from socket import *
 import json,time
 from config import *
@@ -13,7 +13,7 @@ def process_msg(msg):
 
 if __name__ == "__main__":
 
-    algo = Backend(api_key=MY_API_KEY, username=MY_USERNAME, password=MY_PASSWORD, auto_login=True)
+    algo = API(api_key=MY_API_KEY, username=MY_USERNAME, password=MY_PASSWORD, auto_login=True)
     soket = socket(algo.api_key, algo.hash, "T")
     soket.connect()
     while not soket.connected:
