@@ -1,5 +1,5 @@
 from algolab import API
-from socket import *
+from ws import AlgoLabSocket
 import json,time
 from config import *
 
@@ -14,7 +14,7 @@ def process_msg(msg):
 if __name__ == "__main__":
 
     algo = API(api_key=MY_API_KEY, username=MY_USERNAME, password=MY_PASSWORD, auto_login=True)
-    soket = socket(algo.api_key, algo.hash, "T")
+    soket = AlgoLabSocket(algo.api_key, algo.hash, "T")
     soket.connect()
     while not soket.connected:
         time.sleep(0.05)
