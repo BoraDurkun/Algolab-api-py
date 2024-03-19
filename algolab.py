@@ -13,10 +13,10 @@ class API():
         api_key: API_KEY
         username: TC Kimlik No
         password: DENIZBANK_HESAP_ŞİFRENİZ
-        verbose: True, False - İşlemlerin çıktısını yazdırır
+        verbose: True, False - İşlemlerin çiktisini yazdirir
         """
         if verbose:
-            print("Sistem hazırlanıyor...")
+            print("Sistem hazirlaniyor...")
         try:
             self.api_code = api_key.split("-")[1]
         except:
@@ -64,13 +64,13 @@ class API():
             s = self.load_settings()
             if not s or not self.is_alive:
                 if self.verbose:
-                    print("Login zaman aşımına uğradı. Yeniden giriş yapılıyor...")
+                    print("Login zaman aşimina uğradi. Yeniden giriş yapiliyor...")
                     
                 if self.LoginUser():
                     self.LoginUserControl()
             else:
                 if self.verbose:
-                    print("Otomatik login başarılı...")
+                    print("Otomatik login başarili...")
                     
         if self.keep_alive:
             self.thread_keepalive.start()
@@ -85,7 +85,7 @@ class API():
     def LoginUser(self):
         try:
             if self.verbose:
-                print("Login işlemi yapılıyor...")
+                print("Login işlemi yapiliyor...")
                 
             f = inspect.stack()[0][3]
             u = self.encrypt(self.username)
@@ -103,18 +103,18 @@ class API():
             if succ:
                 self.token = content["token"]
                 if self.verbose:
-                    print("Login başarılı.")
+                    print("Login başarili.")
                 return True
             else:
                 if self.verbose:
-                    print(f"Login Başarısız. self.mesaj: {msg}")
+                    print(f"Login Başarisiz. self.mesaj: {msg}")
         except Exception as e:
             print(f"{f}() fonsiyonunda hata oluştu: {e}")
 
     def LoginUserControl(self):
         try:
             if self.verbose:
-                print("Login kontrolü yapılıyor...")
+                print("Login kontrolü yapiliyor...")
                 
             self.sms_code = input("Cep telefonunuza gelen SMS kodunu girin: ")
             f = inspect.stack()[0][3]
@@ -133,13 +133,13 @@ class API():
             if succ:
                 self.hash = content["hash"]
                 if self.verbose:
-                    print("Login kontrolü başarılı.")
+                    print("Login kontrolü başarili.")
                     
                 self.save_settings()
                 return True
             else:
                 if self.verbose:
-                    print(f"Login kontrolü başarısız.\nself.mesaj: {msg}")
+                    print(f"Login kontrolü başarisiz.\nself.mesaj: {msg}")
                     
         except Exception as e:
             print(f"{f}() fonsiyonunda hata oluştu: {e}")
@@ -251,8 +251,8 @@ class API():
             
     def AccountExtre(self, sub_account="",start_date=None,end_date=None):
         """
-        start_date: başlangıç tarihi "2023-07-01 00:00:00" formatında
-        end_date: bitiş tarihi "2023-07-01 00:00:00" formatında
+        start_date: başlangiç tarihi "2023-07-01 00:00:00" formatinda
+        end_date: bitiş tarihi "2023-07-01 00:00:00" formatinda
         """
         try:
             f = inspect.stack()[0][3]
@@ -297,13 +297,13 @@ class API():
     def SendOrder(self, symbol, direction, pricetype, price, lot, sms, email, subAccount):
         """
         :String symbol: Sembol Kodu
-        :String direction: İşlem Yönü: BUY / SELL (Alış/Satış)
+        :String direction: İşlem Yönü: BUY / SELL (Aliş/Satiş)
         :String pricetype: Emir Tipi: piyasa/limit
         :String price: Emir tipi limit ise fiyat girilmelidir. (Örn. 1.98 şeklinde girilmelidir.)
         :String lot: Emir Adeti
         :Bool sms: Sms Gönderim
         :Bool email: Email Gönderim
-        :String subAccount: Alt Hesap Numarası “Boş gönderilebilir. Boş gönderilir ise Aktif Hesap Bilgilerini getirir.”
+        :String subAccount: Alt Hesap Numarasi “Boş gönderilebilir. Boş gönderilir ise Aktif Hesap Bilgilerini getirir.”
 
         Örnek Body:
         {
@@ -335,7 +335,7 @@ class API():
                 return data
             except:
                 f = inspect.stack()[0][3]
-                print(f"{f}() fonksiyonunda veri tipi hatası. Veri, json formatından farklı geldi:")
+                print(f"{f}() fonksiyonunda veri tipi hatasi. Veri, json formatindan farkli geldi:")
                 
                 print(resp.text)
                 
@@ -348,9 +348,9 @@ class API():
         """
         :String id: Emrin ID’ si
         :String price: Düzeltilecek Fiyat
-        :String lot: Lot Miktarı (Viop emri ise girilmelidir.)
-        :Bool viop: Emrin Viop emri olduğunu belirtir. “Viop emri ise true olmalıdır.”
-        :String subAccount: Alt Hesap Numarası “Boş gönderilebilir. Boş gönderilir ise Aktif Hesap Bilgilerini getirir.”
+        :String lot: Lot Miktari (Viop emri ise girilmelidir.)
+        :Bool viop: Emrin Viop emri olduğunu belirtir. “Viop emri ise true olmalidir.”
+        :String subAccount: Alt Hesap Numarasi “Boş gönderilebilir. Boş gönderilir ise Aktif Hesap Bilgilerini getirir.”
 
         Örnek Body
         {
@@ -376,7 +376,7 @@ class API():
                 return data
             except:
                 f = inspect.stack()[0][3]
-                print(f"{f}() fonksiyonunda veri tipi hatası. Veri, json formatından farklı geldi:")
+                print(f"{f}() fonksiyonunda veri tipi hatasi. Veri, json formatindan farkli geldi:")
                 
                 print(resp.text)
                 
@@ -388,7 +388,7 @@ class API():
     def DeleteOrder(self, id, subAccount):
         """
         :String id: Emrin ID’ si
-        :String subAccount: Alt Hesap Numarası “Boş gönderilebilir. Boş gönderilir ise Aktif Hesap Bilgilerini getirir.”
+        :String subAccount: Alt Hesap Numarasi “Boş gönderilebilir. Boş gönderilir ise Aktif Hesap Bilgilerini getirir.”
 
         Örnek Body
         {
@@ -408,7 +408,7 @@ class API():
                 return data
             except:
                 f = inspect.stack()[0][3]
-                print(f"{f}() fonksiyonunda veri tipi hatası. Veri, json formatından farklı geldi:")
+                print(f"{f}() fonksiyonunda veri tipi hatasi. Veri, json formatindan farkli geldi:")
                 
                 print(resp.text)
                 
@@ -421,7 +421,7 @@ class API():
         """
         :String id: Emrin ID’ si
         :String adet: İptal edilecek adet
-        :String subAccount: Alt Hesap Numarası “Boş gönderilebilir. Boş gönderilir ise Aktif Hesap Bilgilerini getirir.”
+        :String subAccount: Alt Hesap Numarasi “Boş gönderilebilir. Boş gönderilir ise Aktif Hesap Bilgilerini getirir.”
 
         Örnek Body
         {
@@ -443,7 +443,7 @@ class API():
                 return data
             except:
                 f = inspect.stack()[0][3]
-                print(f"{f}() fonksiyonunda veri tipi hatası. Veri, json formatından farklı geldi:")
+                print(f"{f}() fonksiyonunda veri tipi hatasi. Veri, json formatindan farkli geldi:")
                 
                 print(resp.text)
                 
@@ -455,7 +455,7 @@ class API():
     def GetEquityOrderHistory(self, id, subAccount):
         """
         :String id: Emrin ID’ si
-        :String subAccount: Alt Hesap Numarası “Boş gönderilebilir. Boş gönderilir ise Aktif Hesap Bilgilerini getirir.”
+        :String subAccount: Alt Hesap Numarasi “Boş gönderilebilir. Boş gönderilir ise Aktif Hesap Bilgilerini getirir.”
 
         Örnek Body
         {
@@ -475,7 +475,7 @@ class API():
                 return data
             except:
                 f = inspect.stack()[0][3]
-                print(f"{f}() fonksiyonunda veri tipi hatası. Veri, json formatından farklı geldi:")
+                print(f"{f}() fonksiyonunda veri tipi hatasi. Veri, json formatindan farkli geldi:")
                 
                 print(resp.text)
                 
@@ -487,7 +487,7 @@ class API():
     def GetViopOrderHistory(self, id, subAccount):
         """
         :String id: Emrin ID’ si
-        :String subAccount: Alt Hesap Numarası “Boş gönderilebilir. Boş gönderilir ise Aktif Hesap Bilgilerini getirir.”
+        :String subAccount: Alt Hesap Numarasi “Boş gönderilebilir. Boş gönderilir ise Aktif Hesap Bilgilerini getirir.”
 
         Örnek Body
         {
@@ -508,7 +508,7 @@ class API():
                 return data
             except:
                 f = inspect.stack()[0][3]
-                print(f"{f}() fonksiyonunda veri tipi hatası. Veri, json formatından farklı geldi:")
+                print(f"{f}() fonksiyonunda veri tipi hatasi. Veri, json formatindan farkli geldi:")
                 
                 print(resp.text)
                 
@@ -540,7 +540,7 @@ class API():
                 return False
         except:
             if not silent:
-                print(f"{f}() fonksiyonunda veri tipi hatası. Veri, json formatından farklı geldi:")
+                print(f"{f}() fonksiyonunda veri tipi hatasi. Veri, json formatindan farkli geldi:")
                 
                 print(resp.text)
                 

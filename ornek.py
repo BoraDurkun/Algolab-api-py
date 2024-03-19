@@ -3,12 +3,12 @@ from datetime import datetime
 from config import *
 import pandas as pd, numpy as np, json, os
 
-############################################ ENDPOINT Fonksiyonları ##################################################
+############################################ ENDPOINT Fonksiyonlari ##################################################
 
 ### Emir  Bilgisi
 def send_order():
     symbol=input("Lütfen Sembol Bilgisi Girin: ")
-    direction=input("Lütfen Yapacağınız işlemi giriniz(buy/sell): ")
+    direction=input("Lütfen Yapacağiniz işlemi giriniz(buy/sell): ")
     pricetype=input("Lütfen Emir Tipi Bilgisi Girin(limit/piyasa): ")
     lot=input("Lütfen Lot Bilgisi Girin: ")
     if pricetype=='piyasa':
@@ -26,12 +26,12 @@ def send_order():
             else: print(order["message"]) 
         except Exception as e:
             print(f"Hata oluştu: {e}")
-    input("Önceki menüye dönmek için herhangi  tuşuna basın: ")
+    input("Önceki menüye dönmek için herhangi  tuşuna basin: ")
     return
 
 def modify_order():
     id=input("Lütfen ID Bilgisi Girin: ")
-    viop_input=input("Eğer VIOP emri silmek istiyorsanız 'true' istemiyorsanız 'false' olarak giriniz: ")
+    viop_input=input("Eğer VIOP emri silmek istiyorsaniz 'true' istemiyorsaniz 'false' olarak giriniz: ")
     viop = viop_input.strip().lower() == 'true'
     lot=input("Lütfen Lot Bilgisi Girin: ")
     price=input("Lütfen Yeni Fiyat Bilgisi Girin: ")
@@ -47,7 +47,7 @@ def modify_order():
         except Exception as e:
             print(f"Hata oluştu: {e}")
     
-    input("Önceki menüye dönmek için herhangi  tuşuna basın: ")
+    input("Önceki menüye dönmek için herhangi  tuşuna basin: ")
     return
 
 def delete_order():
@@ -64,12 +64,12 @@ def delete_order():
             else: print(delete["message"]) 
         except Exception as e:
             print(f"Hata oluştu: {e}")
-    input("Önceki menüye dönmek için herhangi  tuşuna basın: ")
+    input("Önceki menüye dönmek için herhangi  tuşuna basin: ")
     return
 
 def delete_order_viop():
     id=input("Lütfen ID Bilgisi Girin: ")
-    adet=input("Lütfen Kontrat Sayısı Girin: ")
+    adet=input("Lütfen Kontrat Sayisi Girin: ")
     delete=Conn.DeleteOrderViop(id=id,adet=adet,subAccount="")
     print("Viop Emir Silme işlemi gerçekleştiriliyor...")
     if delete:
@@ -82,7 +82,7 @@ def delete_order_viop():
             else: print(delete["message"]) 
         except Exception as e:
             print(f"Hata oluştu: {e}")
-    input("Önceki menüye dönmek için herhangi  tuşuna basın: ")
+    input("Önceki menüye dönmek için herhangi  tuşuna basin: ")
     return
 
 ### Sembol Bilgisi
@@ -107,7 +107,7 @@ def get_candle_data():
                     l = content[i]["low"]
                     c = content[i]["close"]
                     ohlc.append([dt, o, h, l, c])
-                # oluşturduğumuz listi pandas dataframe'e aktarıyoruz
+                # oluşturduğumuz listi pandas dataframe'e aktariyoruz
                 df = pd.DataFrame(columns=["date", "open", "high", "low", "close"], data=np.array(ohlc))
                 print(df.tail())
                 json_data=df.to_json(orient='records')
@@ -116,7 +116,7 @@ def get_candle_data():
             else: print(candle["message"]) 
         except Exception as e:
             print(f"Hata oluştu: {e}")
-    input("Önceki menüye dönmek için herhangi  tuşuna basın: ")
+    input("Önceki menüye dönmek için herhangi  tuşuna basin: ")
     return
 
 def get_equity_info():
@@ -133,7 +133,7 @@ def get_equity_info():
             else: print(info["message"]) 
         except Exception as e:
             print(f"Hata oluştu: {e}")
-    input("Önceki menüye dönmek için herhangi  tuşuna basın: ")
+    input("Önceki menüye dönmek için herhangi  tuşuna basin: ")
     return
 
 ### Bakiye bilgisi
@@ -150,7 +150,7 @@ def get_instant_position():
             else: print(bakiye["message"]) 
         except Exception as e:
             print(f"Hata oluştu: {e}")
-    input("Önceki menüye dönmek için herhangi  tuşuna basın: ")
+    input("Önceki menüye dönmek için herhangi  tuşuna basin: ")
     return
 
 def get_viop_customer_overall():
@@ -166,7 +166,7 @@ def get_viop_customer_overall():
             else: print(bakiye["message"]) 
         except Exception as e:
             print(f"Hata oluştu: {e}") 
-    input("Önceki menüye dönmek için herhangi  tuşuna basın: ")
+    input("Önceki menüye dönmek için herhangi  tuşuna basin: ")
     return
 
 def get_subaccounts():
@@ -182,7 +182,7 @@ def get_subaccounts():
             else: print(bakiye["message"]) 
         except Exception as e:
             print(f"Hata oluştu: {e}")
-    input("Önceki menüye dönmek için herhangi  tuşuna basın: ")
+    input("Önceki menüye dönmek için herhangi  tuşuna basin: ")
     return
 
 ### İşlem Bilgisi
@@ -199,7 +199,7 @@ def get_todays_transaction():
             else: print(islem["message"]) 
         except Exception as e:
             print(f"Hata oluştu: {e}")
-    input("Önceki menüye dönmek için herhangi  tuşuna basın: ")
+    input("Önceki menüye dönmek için herhangi  tuşuna basin: ")
     return
 
 def get_viop_customer_transactions():
@@ -216,7 +216,7 @@ def get_viop_customer_transactions():
         except Exception as e:
             print(f"Hata oluştu: {e}")
     
-    input("Önceki menüye dönmek için herhangi  tuşuna basın: ")
+    input("Önceki menüye dönmek için herhangi  tuşuna basin: ")
     return
 
 ### Oturum Süresi Uzatma
@@ -224,7 +224,7 @@ def session_refresh():
     print("İşlem gerçekleştiriliyor...")
     islem=Conn.SessionRefresh()
     print(islem)
-    input("Önceki menüye dönmek için herhangi  tuşuna basın: ")
+    input("Önceki menüye dönmek için herhangi  tuşuna basin: ")
     return
 
 ### Yeni eklenen Endpointler
@@ -242,13 +242,13 @@ def get_equity_order_history():
             else: print(bakiye["message"]) 
         except Exception as e:
             print(f"Hata oluştu: {e}") 
-    input("Önceki menüye dönmek için herhangi  tuşuna basın: ")
+    input("Önceki menüye dönmek için herhangi  tuşuna basin: ")
     return
 
 def account_extre():
     print("Ekstre çekme işlemi gerçekleştiriliyor...")
-    start_string=input("Lütfen başlangıç tarihi Girin(başlangıç tarihi '2023-07-01' formatında): ")
-    end_string=input("Lütfen bitiş tarihi Girin(bitiş tarihi '2023-07-01' formatında): ")
+    start_string=input("Lütfen başlangiç tarihi Girin(başlangiç tarihi '2023-07-01' formatinda): ")
+    end_string=input("Lütfen bitiş tarihi Girin(bitiş tarihi '2023-07-01' formatinda): ")
     start_object = datetime.strptime(start_string, "%Y-%m-%d").strftime("%Y-%m-%dT00:00:00")
     end_object = datetime.strptime(end_string, "%Y-%m-%d").strftime("%Y-%m-%dT00:00:00")
     bakiye=Conn.AccountExtre(start_date=start_object,end_date=end_object)
@@ -262,7 +262,7 @@ def account_extre():
             else: print(bakiye["message"]) 
         except Exception as e:
             print(f"Hata oluştu: {e}") 
-    input("Önceki menüye dönmek için herhangi  tuşuna basın: ")
+    input("Önceki menüye dönmek için herhangi  tuşuna basin: ")
     return
 
 def cash_flow():   
@@ -277,7 +277,7 @@ def cash_flow():
             else: print(bakiye["message"]) 
         except Exception as e:
             print(f"Hata oluştu: {e}")
-    input("Önceki menüye dönmek için herhangi  tuşuna basın: ")
+    input("Önceki menüye dönmek için herhangi  tuşuna basin: ")
     return
 
 def get_equity_order_history():
@@ -294,7 +294,7 @@ def get_equity_order_history():
             else: print(bakiye["message"]) 
         except Exception as e:
             print(f"Hata oluştu: {e}") 
-    input("Önceki menüye dönmek için herhangi  tuşuna basın: ")
+    input("Önceki menüye dönmek için herhangi  tuşuna basin: ")
     return
 
 def get_viop_order_history():
@@ -311,7 +311,7 @@ def get_viop_order_history():
             else: print(bakiye["message"]) 
         except Exception as e:
             print(f"Hata oluştu: {e}") 
-    input("Önceki menüye dönmek için herhangi  tuşuna basın: ")
+    input("Önceki menüye dönmek için herhangi  tuşuna basin: ")
     return
 
 def risk_simulation():
@@ -327,7 +327,7 @@ def risk_simulation():
             else: print(bakiye["message"]) 
         except Exception as e:
             print(f"Hata oluştu: {e}") 
-    input("Ana menüye dönmek için herhangi  tuşuna basın: ")
+    input("Ana menüye dönmek için herhangi  tuşuna basin: ")
     return
 
 def viop_collateral_info():
@@ -343,7 +343,7 @@ def viop_collateral_info():
             else: print(bakiye["message"]) 
         except Exception as e:
             print(f"Hata oluştu: {e}") 
-    input("Önceki menüye dönmek için herhangi  tuşuna basın: ")
+    input("Önceki menüye dönmek için herhangi  tuşuna basin: ")
     return
 
 ############################################ MENÜLER##################################################
@@ -352,7 +352,7 @@ def main_menu():
     while True:
         print("\nAna Menüye hoş geldiniz. Lütfen yapmak istediğiniz işlemi seçin:")
         print("1. Emir Menüsü")
-        print("2. Sembol Barlarını Çekme")
+        print("2. Sembol Barlarini Çekme")
         print("3. Sembol Bilgisi Çekme")
         print("4. Hesap Bilgisi Menüsü")
         print("5. Günlük İşlemleri Çekme")
@@ -360,8 +360,8 @@ def main_menu():
         print("7. Kredi Risk Simülasyonu")
         print("8. Viop Teminat Bilgisi")
         print("9. Hesap Ekstresi Bilgisi")
-        print("0. Çıkış")
-        secim = input("Seçiminizi yapın: ")
+        print("0. Çikiş")
+        secim = input("Seçiminizi yapin: ")
         
         if secim == '1':
             if order_menu():
@@ -391,11 +391,11 @@ def main_menu():
             if account_extre():
                 continue
         elif secim == '0':
-            print("Çıkış yapılıyor...")
-            os._exit(0)  # 0 başarılı çıkışı temsil eder
+            print("Çikiş yapiliyor...")
+            os._exit(0)  # 0 başarili çikişi temsil eder
         else:
             print("Geçersiz seçim.")
-            continue  # Kullanıcı hatalı seçim yaptı, ana menüye dön
+            continue  # Kullanici hatali seçim yapti, ana menüye dön
 
 def order_menu():
     while True:
@@ -406,9 +406,9 @@ def order_menu():
         print("4. Viop Emir Sil")
         print("5. Pay Emir Tarihçesi")
         print("6. Viop Emir Tarihçesi")
-        print("7. Para Akışı")
+        print("7. Para Akişi")
         print("0. Ana Menü")
-        secim = input("Seçiminizi yapın: ")
+        secim = input("Seçiminizi yapin: ")
         
         if secim == '1':
             if send_order():
@@ -435,16 +435,16 @@ def order_menu():
             main_menu()
         else:
             print("Geçersiz seçim.")
-            continue  # Kullanıcı hatalı seçim yaptı, menüye dön
+            continue  # Kullanici hatali seçim yapti, menüye dön
 
 def account_menu():
     while True:
         print("\nLütfen yapmak istediğiniz işlemi seçin:")
-        print("1. Alt Hesapları Görüntüle")
+        print("1. Alt Hesaplari Görüntüle")
         print("2. Portföy Bilgisi")
         print("3. Viop Overall Bilgisi")
         print("0. Ana Menü")
-        secim = input("Seçiminizi yapın: ")
+        secim = input("Seçiminizi yapin: ")
         
         if secim == '1':
             if get_subaccounts():
@@ -459,10 +459,10 @@ def account_menu():
             main_menu()
         else:
             print("Geçersiz seçim.")
-            continue  # Kullanıcı hatalı seçim yaptı, menüye dön
+            continue  # Kullanici hatali seçim yapti, menüye dön
 
 if __name__ == "__main__":
-    # Login olarak, token alıyoruz
+    # Login olarak, token aliyoruz
     try:
         Conn = API(api_key=MY_API_KEY, username=MY_USERNAME, password=MY_PASSWORD, auto_login=True, verbose=True)
     except Exception as e:

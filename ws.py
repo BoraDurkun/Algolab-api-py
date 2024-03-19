@@ -52,7 +52,7 @@ class AlgoLabSocket():
 
     def connect(self):
         if self.verbose:
-            print("Socket bağlantısı kuruluyor...")
+            print("Socket bağlantisi kuruluyor...")
         context = ssl.create_default_context()
         context.set_ciphers("DEFAULT")
         try:
@@ -62,10 +62,10 @@ class AlgoLabSocket():
             self.connected = True
         except Exception as e:
             self.close()
-            print(f"Socket Hatası: {e}")
+            print(f"Socket Hatasi: {e}")
             return False
         if self.verbose and self.connected:
-            print("Socket bağlantısı başarılı.")
+            print("Socket bağlantisi başarili.")
         return self.connected
 
     def recv(self):

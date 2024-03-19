@@ -13,10 +13,10 @@ socket_url = f"wss://{hostname}/api/ws"
 ORDER_STATUS = {0: "Bekleyen",
 1: "Teslim Edildi",
 2: "Gerçekleşti",
-3: "Kısmi Gerçekleşti",
+3: "Kismi Gerçekleşti",
 4: "İptal Edildi",
 5: "Değiştirildi",
-6: "Askıya Alındı",
+6: "Askiya Alindi",
 7: "Süresi Doldu",
 8: "Hata"}
 
