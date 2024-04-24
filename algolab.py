@@ -8,7 +8,7 @@ from config import *
 last_request = 0.0
 LOCK = False
 class API():
-    def __init__(self, api_key, username, password, auto_login=True, keep_alive=True, verbose=True):
+    def __init__(self, api_key, username, password, auto_login=True, keep_alive=False, verbose=True):
         """
         api_key: API_KEY
         username: TC Kimlik No

@@ -1,6 +1,6 @@
 # USER INFO
 MY_API_KEY='API-KEY' #API Key'inizi Buraya Giriniz
-MY_USERNAME = "TC veya Denizbank Kullanıcı Adı" #TC veya Denizbank Kullanıcı Adınızı Buraya Giriniz
+MY_USERNAME = "TC veya Denizbank Kullanici Adi" #TC veya Denizbank Kullanıcı Adınızı Buraya Giriniz
 MY_PASSWORD = "Şifre" #Denizbank İnternet Bankacılığı Şifrenizi Buraya Giriniz
 
 # URLS
@@ -19,6 +19,11 @@ ORDER_STATUS = {0: "Bekleyen",
 6: "Askiya Alindi",
 7: "Süresi Doldu",
 8: "Hata"}
+
+# Tick Data Wrapper için takip edilmesi istenen semboller, boş olarak verilirse tüm semboller takip edilir.
+TRACKED_SYMBOLS = []
+TRACKED_MARKETS = []
+BUFFER_SIZE = 250  # Wrapper için kaç veri sayısı biriktirilip json dosyalarına aktarılmalı
 
 # ENDPOINTS
 URL_LOGIN_USER = "/api/LoginUser"
