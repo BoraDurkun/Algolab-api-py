@@ -20,10 +20,10 @@ ORDER_STATUS = {0: "Bekleyen",
 7: "Süresi Doldu",
 8: "Hata"}
 
-# Tick Data Wrapper için takip edilmesi istenen semboller, boş olarak verilirse tüm semboller takip edilir.
+# Tick to OHLCV converter için takip edilmesi istenen semboller, boş olarak verilirse tüm semboller veya marketler takip edilir.
 TRACKED_SYMBOLS = []
 TRACKED_MARKETS = []
-BUFFER_SIZE = 250  # Wrapper için kaç veri sayısı biriktirilip json dosyalarına aktarılmalı
+BUFFER_SIZE = 250  # Converter için kaç veri sayısı biriktirilip json dosyalarına aktarılmalı
 
 # ENDPOINTS
 URL_LOGIN_USER = "/api/LoginUser"
