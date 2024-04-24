@@ -4,7 +4,7 @@ from algolab import API
 from ws import *
 from config import *
 
-logging.basicConfig(filename="wrapper_logs.txt"
+logging.basicConfig(filename="converter_logs.txt"
                     ,level=logging.INFO)
 
 columns = ['Date', 'Price', 'Volume', 'Symbol', 'Market']
