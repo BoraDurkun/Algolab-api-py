@@ -8,9 +8,25 @@ import pandas as pd, numpy as np, json, os
 ### Emir  Bilgisi
 def send_order():
     symbol=input("Lütfen Sembol Bilgisi Girin: ")
-    direction=input("Lütfen Yapacağiniz işlemi giriniz(buy/sell): ")
-    pricetype=input("Lütfen Emir Tipi Bilgisi Girin(limit/piyasa): ")
-    lot=input("Lütfen Lot Bilgisi Girin: ")
+    print("\nLütfen Yapacağiniz işlemi giriniz?")
+    print("1. Alım")
+    print("2. Satım")
+    direction = input("Seçiminizi yapin: ")
+    if direction == '1':
+        direction="Buy"
+    elif direction == '2':
+        direction="Sell"
+
+    print("\nLütfen Emir Tipi Bilgisi Girin?")
+    print("1. Limit")
+    print("2. Piyasa")
+    pricetype = input("Seçiminizi yapin: ")
+    if pricetype == '1':
+        pricetype="limit"
+    elif pricetype == '2':
+        pricetype="piyasa"
+
+    lot=input("\nLütfen Lot Bilgisi Girin: ")
     if pricetype=='piyasa':
         price=""
     else:
@@ -246,19 +262,25 @@ def get_equity_order_history():
     return
 
 def account_extre():
-    print("Ekstre çekme işlemi gerçekleştiriliyor...")
-    # Bugünün tarihi ve zaman bilgisi
+    days=int(input("Kaç Günlük ekstre çekmek istersiniz?: "))
+    print("Hangi tipte ekstre çekmek istersiniz?")
+    print("1. Hesap Ekstresi")
+    print("2. Viop Ekstresi")
+    ekstretipi = input("Seçiminizi yapin: ")
+    if ekstretipi == '1':
+        ekstretipi="accountextre"
+    elif ekstretipi == '2':
+        ekstretipi="viopextre"
     end_date = datetime.now(timezone(timedelta(hours=3)))
-    # 5 gün önceki tarih ve zaman bilgisi
-    start_date = end_date - timedelta(days=5)
-
+    start_date = end_date - timedelta(days=days)
+    print("Ekstre çekme işlemi gerçekleştiriliyor...")
     bakiye = Conn.AccountExtre(start_date=start_date, end_date=end_date)
     if bakiye:
         try:
             succ = bakiye["success"]
             if succ:
-                content = bakiye['content']
-                df = pd.DataFrame(content["accountextre"])
+                content = bakiye['content'][ekstretipi]
+                df = pd.DataFrame(content)
                 print(df)
             else:
                 print(bakiye.get('message', 'Bilinmeyen bir hata oluştu.'))
