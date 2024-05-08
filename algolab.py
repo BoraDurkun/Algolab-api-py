@@ -249,24 +249,24 @@ class API():
         except Exception as e:
             print(f"{f}() fonsiyonunda hata oluştu: {e}")
             
-    def AccountExtre(self, sub_account="",start_date=None,end_date=None):
+    def AccountExtre(self, sub_account="", start_date=None, end_date=None):
         """
-        start_date: başlangiç tarihi "2023-07-01 00:00:00" formatinda
-        end_date: bitiş tarihi "2023-07-01 00:00:00" formatinda
+        start_date: başlangiç tarihi "2023-07-01 00:00:00" formatında
+        end_date: bitiş tarihi "2023-07-01 00:00:00" formatında
         """
         try:
             f = inspect.stack()[0][3]
             end_point = URL_ACCOUNTEXTRE
-            payload = {'Subaccount': sub_account,
-            'start': start_date,
-            'end': end_date
+            # datetime nesneleri isoformat() ile dönüştürülüyor
+            payload = {
+                'start': start_date.isoformat() if start_date else None,
+                'end': end_date.isoformat() if end_date else None,
+                'Subaccount': sub_account
             }
             resp = self.post(end_point, payload)
             return self.error_check(resp, f)
         except Exception as e:
-            print(f"{f}() fonsiyonunda hata oluştu: {e}")
-
-
+            print(f"{f}() fonksiyonunda hata oluştu: {e}")
             
     def CashFlow(self, sub_account=""):
         try:

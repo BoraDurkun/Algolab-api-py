@@ -1,5 +1,5 @@
 from algolab import API
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 from config import *
 import pandas as pd, numpy as np, json, os
 
@@ -247,22 +247,25 @@ def get_equity_order_history():
 
 def account_extre():
     print("Ekstre çekme işlemi gerçekleştiriliyor...")
-    start_string=input("Lütfen başlangiç tarihi Girin(başlangiç tarihi '2023-07-01' formatinda): ")
-    end_string=input("Lütfen bitiş tarihi Girin(bitiş tarihi '2023-07-01' formatinda): ")
-    start_object = datetime.strptime(start_string, "%Y-%m-%d").strftime("%Y-%m-%dT00:00:00")
-    end_object = datetime.strptime(end_string, "%Y-%m-%d").strftime("%Y-%m-%dT00:00:00")
-    bakiye=Conn.AccountExtre(start_date=start_object,end_date=end_object)
+    # Bugünün tarihi ve zaman bilgisi
+    end_date = datetime.now(timezone(timedelta(hours=3)))
+    # 5 gün önceki tarih ve zaman bilgisi
+    start_date = end_date - timedelta(days=5)
+
+    bakiye = Conn.AccountExtre(start_date=start_date, end_date=end_date)
     if bakiye:
         try:
-            succ = bakiye["true"]
+            succ = bakiye["success"]
             if succ:
-                content = bakiye["content"]
-                df = pd.DataFrame(content)
-                print(df)  
-            else: print(bakiye["message"]) 
+                content = bakiye['content']
+                df = pd.DataFrame(content["accountextre"])
+                print(df)
+            else:
+                print(bakiye.get('message', 'Bilinmeyen bir hata oluştu.'))
         except Exception as e:
-            print(f"Hata oluştu: {e}") 
-    input("Önceki menüye dönmek için herhangi  tuşuna basin: ")
+            print(f"Hata oluştu: {e}")
+    
+    input("Önceki menüye dönmek için herhangi bir tuşa basın: ")
     return
 
 def cash_flow():   
