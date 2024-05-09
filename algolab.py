@@ -148,6 +148,10 @@ class API():
     # REQUESTS
 
     def SessionRefresh(self, silent=False):
+        """
+        Oturum süresi uzatmak için atılan bir istektir.
+        Cevap olarak Success: True veya eğer hash'iniz geçerliliğini yitirmişte 401 auth hatası olarak döner.
+        """
         try:
             f = inspect.stack()[0][3]
             endpoint = URL_SESSIONREFRESH
@@ -161,6 +165,7 @@ class API():
 
     def GetEquityInfo(self, symbol):
         """
+        Sembolle ilgili tavan taban yüksek düşük anlık fiyat gibi bilgileri çekebilirsiniz.
         :String symbol: Sembol Kodu Örn: ASELS
         """
         try:
@@ -184,6 +189,9 @@ class API():
             
 
     def GetInstantPosition(self, sub_account=""):
+        """
+        Yatırım Hesabınıza bağlı alt hesapları (101, 102 v.b.) ve limitlerini görüntüleyebilirsiniz.
+        """
         try:
             f = inspect.stack()[0][3]
             end_point = URL_INSTANTPOSITION
@@ -195,6 +203,9 @@ class API():
             
 
     def GetTodaysTransaction(self, sub_account=""):
+        """
+        Günlük işlemlerinizi çekebilirsiniz.(Bekleyen gerçekleşen silinen v.b.)
+        """
         try:
             f = inspect.stack()[0][3]
             end_point = URL_TODAYTRANSACTION
@@ -251,8 +262,8 @@ class API():
             
     def AccountExtre(self, sub_account="", start_date=None, end_date=None):
         """
-        start_date: başlangiç tarihi "2023-07-01 00:00:00" formatında
-        end_date: bitiş tarihi "2023-07-01 00:00:00" formatında
+        start_date: başlangiç tarihi "2023-07-01 00:00:00.0000" iso formatında
+        end_date: bitiş tarihi "2023-07-01 00:00:00.0000" iso formatında
         """
         try:
             f = inspect.stack()[0][3]
@@ -279,6 +290,17 @@ class API():
             print(f"{f}() fonsiyonunda hata oluştu: {e}") 
 
     def GetCandleData(self, symbol, period):
+        """
+        Belirlediğiniz sembole ait son 250 barlık OHLCV verileri çekilebilir.
+        symbol: Sembol kodu
+        period: İstenilen bar periyodu dakikalık olarak girilir.(1,2,5,10,15,30,60,120,240,480,1440(Günlük için))
+
+        Örnek Body:
+        {
+            "symbol": "TSKB",
+            "period": "1440",
+        }
+        """
         try:
             f = inspect.stack()[0][3]
             end_point = URL_GETCANDLEDATA
@@ -520,7 +542,6 @@ class API():
 
     def GetIsAlive(self):
         try:
-            #resp = self.SessionRefresh(silent=True)
             resp = self.GetSubAccounts(silent=True)
             return resp["success"]
         except:
