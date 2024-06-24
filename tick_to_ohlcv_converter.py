@@ -34,7 +34,12 @@ def append_to_existing_data(ohlcv, symbol_received, market_received):
         if os.path.exists(candles_path):
             with open(candles_path, 'r') as f:
                 existing_data = pd.read_json(f)
+                
+            # Ensure data types match
+            ohlcv = ohlcv.astype(existing_data.dtypes.to_dict())
+            # Check if there is already data for the given date
             idx = existing_data[existing_data['Date'] == ohlcv['Date'].iloc[0]].index
+            
             if not idx.empty:
                 for column in ['Open', 'High', 'Low', 'Close', 'Volume']:
                     if column == 'High':
@@ -76,7 +81,7 @@ def process_data(content):
         df_temp.loc[0] = [date, price, volume, symbol_received, market_received]
         df_temp.set_index('Date', inplace=True)
         
-        ohlcv_resampled = df_temp.resample('1T').agg({
+        ohlcv_resampled = df_temp.resample('1min').agg({
             'Price': ['first', 'max', 'min', 'last'],
             'Volume': 'sum'
         })
