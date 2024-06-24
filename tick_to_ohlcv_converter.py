@@ -110,11 +110,14 @@ if __name__ == "__main__":
                     msg = json.loads(data)
                     content = msg["Content"]
                     type = msg["Type"]
-                    if type != "O" and ("Market" in content and "Symbol" in content) and ((content["Market"] in TRACKED_MARKETS and content["Symbol"] in TRACKED_SYMBOLS) or (TRACKED_MARKETS == [] and TRACKED_SYMBOLS == []) or (content["Market"] in TRACKED_MARKETS and TRACKED_SYMBOLS == []) ):
-                        ohlcv_resampled, symbol_received, market_received = process_data(content)
-                        buffered_data.append((ohlcv_resampled, symbol_received, market_received))
-                        if len(buffered_data) >= BUFFER_SIZE:
-                            loop.run_until_complete(process_buffered_data())
+                    if type != "O" and "Market" in content and "Symbol" in content:
+                        if (not TRACKED_MARKETS and not TRACKED_SYMBOLS) or \
+                        (content["Market"] in TRACKED_MARKETS) or \
+                        (content["Symbol"] in TRACKED_SYMBOLS):
+                            ohlcv_resampled, symbol_received, market_received = process_data(content)
+                            buffered_data.append((ohlcv_resampled, symbol_received, market_received))
+                            if len(buffered_data) >= BUFFER_SIZE:
+                                loop.run_until_complete(process_buffered_data())
                 except Exception as e:
                     print(f"Error processing message with data: {data}", e)  # Include raw data in error message
                     soket.close()
