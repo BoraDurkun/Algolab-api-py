@@ -23,7 +23,8 @@ ORDER_STATUS = {0: "Bekleyen",
 # Tick to OHLCV converter için takip edilmesi istenen semboller, boş olarak verilirse tüm semboller veya marketler takip edilir.
 TRACKED_SYMBOLS = []
 TRACKED_MARKETS = []
-BUFFER_SIZE = 250  # Converter için kaç veri sayısı biriktirilip json dosyalarına aktarılmalı
+BUFFER_SIZE = 50000  # Converter için kaç veri sayısı biriktirilip json dosyalarına aktarılmalı
+#Sadece IMKBH için 5000 gecikme olmadan çalışmaktadır. Tüm semboller içinse 50000 gecikme olmadan çalışmaktadır.
 
 # ENDPOINTS
 URL_LOGIN_USER = "/api/LoginUser"

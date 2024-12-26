@@ -78,7 +78,7 @@ class API():
     def ping(self):
         while self.keep_alive:
             p = self.SessionRefresh(silent=True)
-            time.sleep(60 * 15)
+            time.sleep(60 * 5)
 
     # LOGIN
 
