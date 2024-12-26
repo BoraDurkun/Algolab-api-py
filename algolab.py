@@ -588,7 +588,7 @@ class API():
     def _request(self, method, url, endpoint, payload, headers):
         global last_request, LOCK
         while LOCK:
-            time.sleep(0.1)
+            time.sleep(0.01)
         LOCK = True
         try:
             response = ""
@@ -597,7 +597,7 @@ class API():
                 diff = t - last_request
                 wait_for = last_request > 0.0 and diff < 5.0 # son işlemden geçen süre 1 saniyeden küçükse bekle
                 if wait_for:
-                    time.sleep(5 - diff + 0.1)
+                    time.sleep(5 - diff + 0.01)
                 response = requests.post(url + endpoint, json=payload, headers=headers)
                 last_request = time.time()
         finally:

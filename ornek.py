@@ -245,7 +245,7 @@ def get_viop_customer_transactions():
             succ = islem["success"]
             if succ:
                 content = islem["content"]
-                df = pd.DataFrame(content,index=[0])
+                df = pd.DataFrame(content)
                 print(df)       
             else: print(islem["message"]) 
         except Exception as e:
