@@ -17,7 +17,7 @@ if __name__ == "__main__":
     soket = AlgoLabSocket(algo.api_key, algo.hash, "T")
     soket.connect()
     while not soket.connected:
-        time.sleep(0.01)
+        time.sleep(0.001)
 
     data = {"Type": "T", "Symbols": ["ALL"]}
     soket.send(data)

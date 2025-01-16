@@ -141,13 +141,12 @@ def get_candle_data():
                     h = content[i]["high"]
                     l = content[i]["low"]
                     c = content[i]["close"]
-                    ohlc.append([dt, o, h, l, c])
+                    v = content[i]["volume"]
+                    a = content[i]["amount"]
+                    ohlc.append([dt, o, h, l, c, v, a])
                 # oluşturduğumuz listi pandas dataframe'e aktariyoruz
-                df = pd.DataFrame(columns=["date", "open", "high", "low", "close"], data=np.array(ohlc))
+                df = pd.DataFrame(columns=["date", "open", "high", "low", "close", "volume", "amount"], data=np.array(ohlc))
                 print(df.tail())
-                json_data=df.to_json(orient='records')
-                with open(symbol+period+'.json', 'w', encoding='utf-8') as f:
-                    f.write(json_data)
             else: print(candle["message"]) 
         except Exception as e:
             print(f"Hata oluştu: {e}")
