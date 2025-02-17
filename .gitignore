@@ -2,7 +2,6 @@
 *.pyc
 *.txt
 *.json
-config.py
-config.py
 *.log
+*.json
 config.py
