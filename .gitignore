@@ -3,3 +3,5 @@
 *.txt
 *.json
 config.py
+config.py
+*.log
